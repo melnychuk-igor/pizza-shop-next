@@ -4,3 +4,5 @@ export { Categories } from './categories';
 export { Topbar } from './top-bar';
 export { Filters } from './filters';
 export { FilterCheckbox } from './filter-checkbox';
+export { SearchInput } from './search-input';
+

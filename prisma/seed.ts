@@ -1,192 +1,170 @@
+// import { PrismaClient } from '@prisma/client';
+// import { prisma } from './prisma-client';
+import 'dotenv/config';  // ← це завантажить .env автоматично
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
+import { hashSync } from 'bcryptjs';
+import { categories, ingredients, products } from './constants';
+import { Prisma } from './generated/client';
 
-const prisma = new PrismaClient();
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
 
-const randomNumber = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min) + min);
+// const prisma = new PrismaClient();
+// const { PrismaClient } = require('@prisma/client')
+
+
+const connectionString = process.env.DATABASE_URL;
+
+
+
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL не задано в .env');
+}
+
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+
+const prisma = new PrismaClient({
+  adapter,
+  log: ['query', 'info', 'warn', 'error'], // опціонально
+});
+
+
+// const prisma = new PrismaClient()
+
+
+
+
+const randomDecimalNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
 };
 
-const generatePizza = (productId: number, type: number, size: number) => {
+const generateProductItem = ({
+  productId,
+  pizzaType,
+  size,
+}: {
+  productId: number;
+  pizzaType?: 1 | 2;
+  size?: 20 | 30 | 40;
+}) => {
   return {
     productId,
+    price: randomDecimalNumber(190, 600),
+    pizzaType,
     size,
-    type,
-    price: randomNumber(190, 600),
-    carbs: randomNumber(10, 30),
-    fats: randomNumber(5, 15),
-    kcal: randomNumber(180, 300),
-    proteins: randomNumber(20, 45),
-    weight: randomNumber(400, 650),
-  };
+  } as Prisma.ProductItemUncheckedCreateInput;
 };
 
 async function up() {
   await prisma.user.createMany({
     data: [
       {
-        fullName: 'User',
-        phone: '79992222222',
-        phoneVerified: new Date(),
+        fullName: 'User Test',
+        email: 'user@test.ru',
+        password: hashSync('111111', 10),
+        verified: new Date(),
         role: 'USER',
       },
       {
-        fullName: 'Admin',
-        phone: '79991111111',
-        phoneVerified: new Date(),
+        fullName: 'Admin Admin',
+        email: 'admin@test.ru',
+        password: hashSync('111111', 10),
+        verified: new Date(),
         role: 'ADMIN',
       },
     ],
   });
 
-  await prisma.product.createMany({
-    data: [
-      {
-        name: 'Пепперони фреш',
-        imageUrl:
-          'https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp',
-        active: true,
-      },
-      {
-        name: 'Сырная',
-        imageUrl:
-          'https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
-        active: true,
-      },
-      {
-        name: 'Чоризо фреш',
-        imageUrl:
-          'https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp',
-        active: true,
-      },
-    ],
-  });
-
-  await prisma.pizza.createMany({
-    data: [
-      generatePizza(1, 1, 20),
-      generatePizza(1, 2, 30),
-      generatePizza(1, 3, 40),
-
-      generatePizza(2, 1, 20),
-      generatePizza(2, 2, 30),
-      generatePizza(2, 3, 40),
-
-      generatePizza(3, 1, 20),
-      generatePizza(3, 2, 30),
-      generatePizza(3, 3, 40),
-    ],
+  await prisma.category.createMany({
+    data: categories,
   });
 
   await prisma.ingredient.createMany({
+    data: ingredients,
+  });
+
+  await prisma.product.createMany({
+    data: products,
+  });
+
+  const pizza1 = await prisma.product.create({
+    data: {
+      name: 'Pepperoni Fresh',
+      imageUrl:
+        '/images/ingredients/11EE7D61304FAF5A98A6958F2BB2D260.webp',
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(0, 5),
+      },
+    },
+  });
+
+  const pizza2 = await prisma.product.create({
+    data: {
+      name: 'Cheese',
+      imageUrl:
+        '/images/ingredients/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(5, 10),
+      },
+    },
+  });
+
+  const pizza3 = await prisma.product.create({
+    data: {
+      name: 'Chorizo Fresh',
+      imageUrl:
+        '/images/ingredients/11EE7D61706D472F9A5D71EB94149304.webp',
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  await prisma.productItem.createMany({
     data: [
-      {
-        name: 'Сырный бортик',
-        price: 179,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/99f5cb91225b4875bd06a26d2e842106.png',
-      },
-      {
-        name: 'Сливочная моцарелла',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/cdea869ef287426386ed634e6099a5ba.png',
-      },
-      {
-        name: 'Сыры чеддер и пармезан',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA69C1FE796',
-      },
-      {
-        name: 'Острый перец халапеньо',
-        price: 59,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/11ee95b6bfdf98fb88a113db92d7b3df.png',
-      },
-      {
-        name: 'Нежный цыпленок',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA5B328D35A',
-      },
-      {
-        name: 'Шампиньоны',
-        price: 59,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA67259A324',
-      },
-      {
-        name: 'Бекон',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA637AAB68F',
-      },
-      {
-        name: 'Ветчина',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA61B9A8D61',
-      },
-      {
-        name: 'Пикантная пепперони',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA6258199C3',
-      },
-      {
-        name: 'Острая чоризо',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA62D5D6027',
-      },
-      {
-        name: 'Маринованные огурчики',
-        price: 59,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A21DA51A81211E9EA89958D782B',
-      },
-      {
-        name: 'Свежие томаты',
-        price: 59,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA7AC1A1D67',
-      },
-      {
-        name: 'Красный лук',
-        price: 59,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA60AE6464C',
-      },
-      {
-        name: 'Сочные ананасы',
-        price: 59,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A21DA51A81211E9AFA6795BA2A0',
-      },
-      {
-        name: 'Итальянские травы',
-        price: 39,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/370dac9ed21e4bffaf9bc2618d258734.png',
-      },
-      {
-        name: 'Сладкий перец',
-        price: 59,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA63F774C1B',
-      },
-      {
-        name: 'Кубики брынзы',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA6B0FFC349',
-      },
-      {
-        name: 'Митболы',
-        price: 79,
-        imageUrl:
-          'https://cdn.dodostatic.net/static/Img/Ingredients/b2f3a5d5afe44516a93cfc0d2ee60088.png',
-      },
+      // Pizza "Pepperoni Fresh"
+      generateProductItem({ productId: pizza1.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 40 }),
+
+      // Pizza "Cheese"
+      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 30 }),
+      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 40 }),
+      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 20 }),
+      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 40 }),
+
+      // Pizza "Chorizo Fresh"
+      generateProductItem({ productId: pizza3.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 40 }),
+
+      // Other products
+      generateProductItem({ productId: 1 }),
+      generateProductItem({ productId: 2 }),
+      generateProductItem({ productId: 3 }),
+      generateProductItem({ productId: 4 }),
+      generateProductItem({ productId: 5 }),
+      generateProductItem({ productId: 6 }),
+      generateProductItem({ productId: 7 }),
+      generateProductItem({ productId: 8 }),
+      generateProductItem({ productId: 9 }),
+      generateProductItem({ productId: 10 }),
+      generateProductItem({ productId: 11 }),
+      generateProductItem({ productId: 12 }),
+      generateProductItem({ productId: 13 }),
+      generateProductItem({ productId: 14 }),
+      generateProductItem({ productId: 15 }),
+      generateProductItem({ productId: 16 }),
+      generateProductItem({ productId: 17 }),
     ],
   });
 
@@ -195,36 +173,98 @@ async function up() {
       {
         userId: 1,
         totalAmount: 0,
+        token: '11111',
       },
       {
         userId: 2,
         totalAmount: 0,
+        token: '222222',
       },
     ],
   });
 
   await prisma.cartItem.create({
     data: {
-      pizzaId: 1,
+      productItemId: 1,
       cartId: 1,
-      userId: 1,
-      quantity: 1,
+      quantity: 2,
       ingredients: {
         connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
       },
     },
   });
+
+  await prisma.story.createMany({
+    data: [
+      {
+        previewImageUrl:
+          'https://cdn.inappstory.ru/story/xep/xzh/zmc/cr4gcw0aselwvf628pbmj3j/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=3101815496',
+      },
+      {
+        previewImageUrl:
+          'https://cdn.inappstory.ru/story/km2/9gf/jrn/sb7ls1yj9fe5bwvuwgym73e/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=3074015640',
+      },
+      {
+        previewImageUrl:
+          'https://cdn.inappstory.ru/story/quw/acz/zf5/zu37vankpngyccqvgzbohj1/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=1336215020',
+      },
+      {
+        previewImageUrl:
+          'https://cdn.inappstory.ru/story/7oc/5nf/ipn/oznceu2ywv82tdlnpwriyrq/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=38903958',
+      },
+      {
+        previewImageUrl:
+          'https://cdn.inappstory.ru/story/q0t/flg/0ph/xt67uw7kgqe9bag7spwkkyw/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=2941222737',
+      },
+      {
+        previewImageUrl:
+          'https://cdn.inappstory.ru/story/lza/rsp/2gc/xrar8zdspl4saq4uajmso38/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=4207486284',
+      },
+    ],
+  });
+
+  await prisma.storyItem.createMany({
+    data: [
+      {
+        storyId: 1,
+        sourceUrl:
+          'https://cdn.inappstory.ru/file/dd/yj/sx/oqx9feuljibke3mknab7ilb35t.webp?k=IgAAAAAAAAAE',
+      },
+      {
+        storyId: 1,
+        sourceUrl:
+          'https://cdn.inappstory.ru/file/jv/sb/fh/io7c5zarojdm7eus0trn7czdet.webp?k=IgAAAAAAAAAE',
+      },
+      {
+        storyId: 1,
+        sourceUrl:
+          'https://cdn.inappstory.ru/file/ts/p9/vq/zktyxdxnjqbzufonxd8ffk44cb.webp?k=IgAAAAAAAAAE',
+      },
+      {
+        storyId: 1,
+        sourceUrl:
+          'https://cdn.inappstory.ru/file/ur/uq/le/9ufzwtpdjeekidqq04alfnxvu2.webp?k=IgAAAAAAAAAE',
+      },
+      {
+        storyId: 1,
+        sourceUrl:
+          'https://cdn.inappstory.ru/file/sy/vl/c7/uyqzmdojadcbw7o0a35ojxlcul.webp?k=IgAAAAAAAAAE',
+      },
+    ],
+  });
 }
 
+
 async function down() {
-  await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE;`;
-  await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE;`;
-  await prisma.$executeRaw`TRUNCATE TABLE "Order" RESTART IDENTITY CASCADE;`;
-  await prisma.$executeRaw`TRUNCATE TABLE "Pizza" RESTART IDENTITY CASCADE;`;
-  await prisma.$executeRaw`TRUNCATE TABLE "VerificationCode" RESTART IDENTITY CASCADE;`;
-  await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE;`;
-  await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE;`;
+  await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`;
 }
+
 
 async function main() {
   try {
