@@ -38,7 +38,7 @@ export default async function Home({
         <Title size="lg" text="All pizzas" className="font-extrabold" />
       </Container>
 
-      <Topbar />
+      <Topbar categories={categories.filter} />
 
       <Container className="pb-14">
         <div className="flex gap-[60px]">
