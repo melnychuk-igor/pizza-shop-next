@@ -8,7 +8,7 @@ import { calcCartItemTotalPrice } from '@/shared/lib/calc-cart-item-total-price'
 import { createStripePayment, sendEmail } from '@/shared/lib';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { OrderStatus, Prisma } from '@prisma/client';
-import { hashSync } from 'bcrypt';
+import { hashSync } from 'bcryptjs';
 import { cookies } from 'next/headers';
 
 export async function createOrder(data: CheckoutFormValues) {

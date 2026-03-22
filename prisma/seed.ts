@@ -95,7 +95,7 @@ async function up() {
     data: {
       name: 'Pepperoni Fresh',
       imageUrl:
-        'http://localhost:3000/assets/images/pizzeria/11EE7D61304FAF5A98A6958F2BB2D260.webp',
+        'https://pizza-shop-next.vercel.app/assets/images/pizzeria/11EE7D61304FAF5A98A6958F2BB2D260.webp',
       categoryId: 1,
       ingredients: {
         connect: _ingredients.slice(0, 5),
@@ -107,7 +107,7 @@ async function up() {
     data: {
       name: 'Cheese',
       imageUrl:
-        'http://localhost:3000/assets/images/pizzeria/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
+        'https://pizza-shop-next.vercel.app/assets/images/pizzeria/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
       categoryId: 1,
       ingredients: {
         connect: _ingredients.slice(5, 10),
@@ -119,7 +119,7 @@ async function up() {
     data: {
       name: 'Chorizo Fresh',
       imageUrl:
-        'http://localhost:3000/assets/images/pizzeria/11EE7D61706D472F9A5D71EB94149304.webp',
+        'https://pizza-shop-next.vercel.app/assets/images/pizzeria/11EE7D61706D472F9A5D71EB94149304.webp',
       categoryId: 1,
       ingredients: {
         connect: _ingredients.slice(10, 40),
@@ -198,31 +198,31 @@ async function up() {
     data: [
       {
         previewImageUrl:
-          'http://localhost:3000/assets/images/story/story1.webp',
+          'https://pizza-shop-next.vercel.app/assets/images/story/story1.webp',
       },
       {
         previewImageUrl:
-          'http://localhost:3000/assets/images/story/story2.webp',
+          'https://pizza-shop-next.vercel.app/assets/images/story/story2.webp',
       },
       {
         previewImageUrl:
-          'http://localhost:3000/assets/images/story/story3.webp',
+          'https://pizza-shop-next.vercel.app/assets/images/story/story3.webp',
       },
       {
         previewImageUrl:
-          'http://localhost:3000/assets/images/story/story4.webp',
+          'https://pizza-shop-next.vercel.app/assets/images/story/story4.webp',
       },
       {
         previewImageUrl:
-          'http://localhost:3000/assets/images/story/story5.webp',
+          'https://pizza-shop-next.vercel.app/assets/images/story/story5.webp',
       },
       {
         previewImageUrl:
-          'http://localhost:3000/assets/images/story/story6.webp',
+          'https://pizza-shop-next.vercel.app/assets/images/story/story6.webp',
       },
       {
         previewImageUrl:
-          'http://localhost:3000/assets/images/story/story7.webp',
+          'https://pizza-shop-next.vercel.app/assets/images/story/story7.webp',
       },
     ],
   });
@@ -232,17 +232,17 @@ async function up() {
       {
         storyId: 1,
         sourceUrl:
-        'http://localhost:3000/assets/images/story-items/story-item1-1.webp',
+        'https://pizza-shop-next.vercel.app/assets/images/story-items/story-item1-1.webp',
       },
       {
         storyId: 1,
         sourceUrl:
-        'http://localhost:3000/assets/images/story-items/story-item1-2.webp',
+        'https://pizza-shop-next.vercel.app/assets/images/story-items/story-item1-2.webp',
       },
       {
         storyId: 2,
         sourceUrl:
-        'http://localhost:3000/assets/images/story-items/story-item2-1.webp',
+        'https://pizza-shop-next.vercel.app/assets/images/story-items/story-item2-1.webp',
       },
     ],
   });
