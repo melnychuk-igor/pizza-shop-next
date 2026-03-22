@@ -1,11 +1,12 @@
 'use server';
 
 import { prisma } from '@/libs/prisma';
-import { PayOrderTemplate } from '@/shared/components';
-import { VerificationUserTemplate } from '@/shared/components/shared/email-temapltes/verification-user';
+// import { PayOrderTemplate } from '@/shared/components';
+// import { VerificationUserTemplate } from '@/shared/components/shared/email-temapltes/verification-user';
 import { CheckoutFormValues } from '@/shared/constants';
 import { calcCartItemTotalPrice } from '@/shared/lib/calc-cart-item-total-price';
-import { createStripePayment, sendEmail } from '@/shared/lib';
+// import { createStripePayment, sendEmail } from '@/shared/lib';
+import { createStripePayment } from '@/shared/lib';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { OrderStatus, Prisma } from '@prisma/client';
 import { hashSync } from 'bcryptjs';
@@ -109,15 +110,15 @@ export async function createOrder(data: CheckoutFormValues) {
 
     const paymentUrl = paymentData.confirmation.confirmation_url;
 
-    await sendEmail(
-      data.email,
-      'Next Pizza / Pay for order #' + order.id,
-      PayOrderTemplate({
-        orderId: order.id,
-        totalAmount: order.totalAmount,
-        paymentUrl,
-      }),
-    );
+    // await sendEmail(
+    //   data.email,
+    //   'Next Pizza / Pay for order #' + order.id,
+    //   PayOrderTemplate({
+    //     orderId: order.id,
+    //     totalAmount: order.totalAmount,
+    //     paymentUrl,
+    //   }),
+    // );
 
     return paymentUrl;
   } catch (err) {
@@ -189,13 +190,13 @@ export async function registerUser(body: Prisma.UserCreateInput) {
       },
     });
 
-    await sendEmail(
-      createdUser.email,
-      'Next Pizza / 📝 Registration confirmation',
-      VerificationUserTemplate({
-        code,
-      }),
-    );
+    // await sendEmail(
+    //   createdUser.email,
+    //   'Next Pizza / 📝 Registration confirmation',
+    //   VerificationUserTemplate({
+    //     code,
+    //   }),
+    // );
   } catch (err) {
     console.log('Error [CREATE_USER]', err);
     throw err;

@@ -1,9 +1,9 @@
 import Stripe from 'stripe';
 import { prisma } from '@/libs/prisma';
 import { OrderStatus } from '@prisma/client';
-import { OrderSuccessTemplate } from '@/shared/components/shared/email-temapltes/order-success';
-import { sendEmail } from '@/shared/lib';
-import { CartItemDTO } from '@/shared/services/dto/cart.dto';
+// import { OrderSuccessTemplate } from '@/shared/components/shared/email-temapltes/order-success';
+// import { sendEmail } from '@/shared/lib';
+// import { CartItemDTO } from '@/shared/services/dto/cart.dto';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -58,15 +58,15 @@ export async function POST(req: NextRequest) {
       data: { status: isSucceeded ? OrderStatus.SUCCEEDED : OrderStatus.CANCELLED },
     });
 
-    if (isSucceeded) {
-      const items = JSON.parse(order.items as string) as CartItemDTO[];
+    // if (isSucceeded) {
+    //   const items = JSON.parse(order.items as string) as CartItemDTO[];
 
-      await sendEmail(
-        order.email,
-        'Next Pizza / Your order has been successfully completed 🎉',
-        OrderSuccessTemplate({ orderId: order.id, items }),
-      );
-    }
+    //   await sendEmail(
+    //     order.email,
+    //     'Next Pizza / Your order has been successfully completed 🎉',
+    //     OrderSuccessTemplate({ orderId: order.id, items }),
+    //   );
+    // }
 
     return NextResponse.json({ received: true });
   } catch (error) {
