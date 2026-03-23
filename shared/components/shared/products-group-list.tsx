@@ -33,7 +33,7 @@ export const ProductsGroupList: React.FC<Props> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const sort = searchParams.get('sort');
+  const sort = (searchParams.get('sort')) ? searchParams.get('sort') : 'name_asc';
 
   const sortedItems = React.useMemo(() => {
     if (!sort) return items;
