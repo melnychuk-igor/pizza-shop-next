@@ -6,6 +6,7 @@ import { Input } from '../ui';
 import { RangeSlider } from './range-slider';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
 import { useQueryFilters, useIngredients, useFilters } from '@/shared/hooks';
+import { SearchInput } from './search-input';
 
 interface Props {
   className?: string;
@@ -26,6 +27,9 @@ export const Filters: React.FC<Props> = ({ className }) => {
 
   return (
     <div className={className}>
+            {/* <SearchInput /> */}
+
+
       <Title text="Filters" size="sm" className="mb-5 font-bold" />
 
       {/* Top checkboxes */}

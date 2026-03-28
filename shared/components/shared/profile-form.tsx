@@ -53,18 +53,18 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <Container className="my-10">
+    <Container className="py-5 lg:py-10">
       <Title text={`Personal data | #${data.id}`} size="md" className="font-bold" />
 
       <FormProvider {...form}>
-        <form className="flex flex-col gap-5 w-96 mt-10" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-5 w-full max-w-96 mt-5 lg:mt-10" onSubmit={form.handleSubmit(onSubmit)}>
           <FormInput name="email" label="E-Mail" required />
           <FormInput name="fullName" label="Full name" required />
 
           <FormInput type="password" name="password" label="New password" required />
           <FormInput type="password" name="confirmPassword" label="Repeat password" required />
 
-          <Button disabled={form.formState.isSubmitting} className="text-base mt-10" type="submit">
+          <Button disabled={form.formState.isSubmitting} className="text-base mt-5 lg:mt-10" type="submit">
             Save
           </Button>
 

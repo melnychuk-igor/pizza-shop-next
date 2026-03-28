@@ -51,7 +51,7 @@ export const SortPopup: React.FC<Props> = ({ className }) => {
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-3 bg-gray-50 px-5 h-[52px] rounded-2xl',
+        'inline-flex items-center gap-3 bg-gray-50 px-5 h-[40px] lg:h-[52px] rounded-2xl cursor-pointer transition-colors hover:bg-primary hover:text-white',
         className
       )}
     >
@@ -63,12 +63,12 @@ export const SortPopup: React.FC<Props> = ({ className }) => {
           sortProducts(value);
         }}
       >
-        <SelectTrigger className="border-none bg-transparent p-0 h-auto focus:ring-0">
+        <SelectTrigger className="border-none p-0 h-auto focus:ring-0">
           {/* <SelectValue>{currentLabel}</SelectValue> */}
           <SelectValue placeholder={sort} />
         </SelectTrigger>
 
-        <SelectContent>
+        <SelectContent className='relative left-[-24px]'>
           <SelectGroup>
             {sortOptions.map((item) => (
               <SelectItem key={item.value} value={item.value}>

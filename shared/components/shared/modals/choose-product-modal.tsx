@@ -1,6 +1,10 @@
 'use client';
 
-import { Dialog, DialogContent, DialogTitle } from '@/shared/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from '@/shared/components/ui/dialog';
 import { cn } from '@/shared/lib/utils';
 import React from 'react';
 import { useRouter } from 'next/navigation';
@@ -15,16 +19,22 @@ interface Props {
 }
 
 export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
-  const router = useRouter();  
+  const router = useRouter();
 
   return (
-    <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
-		<DialogTitle className='none'>Product selection</DialogTitle>
+    <Dialog
+      className=""
+      open={Boolean(product)}
+      onOpenChange={() => router.back()}
+    >
+      <DialogTitle className="none">Product selection</DialogTitle>
       <DialogContent
         className={cn(
-          'p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden',
-          className,
-        )} aria-describedby={undefined}>
+          'p-0 w-[calc(100%-30px)] max-w-[1060px] max-h-[95svh] rounded-sm overflow-y-auto lg:overflow-hidden lg:min-h-[500px] bg-white',
+          className
+        )}
+        aria-describedby={undefined}
+      >
         <ProductForm product={product} onSubmit={() => router.back()} />
       </DialogContent>
     </Dialog>

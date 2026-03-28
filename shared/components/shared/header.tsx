@@ -18,7 +18,11 @@ interface Props {
   className?: string;
 }
 
-export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, className }) => {
+export const Header: React.FC<Props> = ({
+  hasSearch = true,
+  hasCart = true,
+  className,
+}) => {
   const router = useRouter();
   const [openAuthModal, setOpenAuthModal] = React.useState(false);
 
@@ -28,7 +32,8 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
     let toastMessage = '';
 
     if (searchParams.has('paid')) {
-      toastMessage = 'Order successfully paid! Information has been sent to your email.';
+      toastMessage =
+        'Order successfully paid! Information has been sent to your email.';
     }
 
     if (searchParams.has('verified')) {
@@ -47,27 +52,34 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
 
   return (
     <header className={cn('border-b', className)}>
-      <Container className="flex items-center justify-between py-8">
+      <Container className="flex items-center justify-between py-4 lg:py-8">
         {/* Left part */}
-        <Link href="/">
-          <div className="flex items-center gap-4">
-            <Image src="/logo.png" alt="Logo" width={35} height={35} />
-            <div>
-              <h1 className="text-2xl uppercase font-black">Next Pizza</h1>
-              <p className="text-sm text-gray-400 leading-3">it doesn&apos;t get any tastier</p>
+        <div className="flex items-center flex-1 gap-3">
+          <Link href="/" className="block">
+            <div className="flex items-center gap-4">
+              <Image className='min-w-[35px]' src="/logo.png" alt="Logo" width={35} height={35} />
+              <div className="hidden lg:block">
+                <h1 className="text-2xl uppercase font-black">Next Pizza</h1>
+                <p className="text-gray-400 leading-3">
+                  it doesn&apos;t get any tastier
+                </p>
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
 
-        {hasSearch && (
-          <div className="mx-10 flex-1">
-            <SearchInput />
-          </div>
-        )}
+          {hasSearch && (
+            <div className="w-[100%] max-w-[240px] flex items-center">
+              <SearchInput />
+            </div>
+          )}
+        </div>
 
         {/* Right part */}
         <div className="flex items-center gap-3">
-          <AuthModal open={openAuthModal} onClose={() => setOpenAuthModal(false)} />
+          <AuthModal
+            open={openAuthModal}
+            onClose={() => setOpenAuthModal(false)}
+          />
 
           <ProfileButton onClickSignIn={() => setOpenAuthModal(true)} />
 

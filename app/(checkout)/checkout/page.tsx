@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   CheckoutSidebar,
-  Container,
   Title,
   CheckoutAddressForm,
   CheckoutCart,
@@ -82,14 +81,14 @@ export default function CheckoutPage() {
   };
 
   return (
-    <Container className="mt-10">
-      <Title text="Checkout" className="font-extrabold mb-8 text-[36px]" />
+    <div className="max-w-[700px] lg:max-w-full mx-auto mt-5 lg:mt-10">
+      <Title text="Checkout" className="font-extrabold mb-4 lg:mb-8 text-[36px]" />
 
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex gap-10">
+          <div className="flex flex-col lg:flex-row gap-5 lg:gap-10">
             {/* Left side */}
-            <div className="flex flex-col gap-10 flex-1 mb-20">
+            <div className="flex flex-col gap-5 lg:gap-10 flex-1 mb-0 lg:mb-20">
               <CheckoutCart
                 onClickCountButton={onClickCountButton}
                 removeCartItem={removeCartItem}
@@ -103,12 +102,12 @@ export default function CheckoutPage() {
             </div>
 
             {/* Right side */}
-            <div className="w-[450px]">
+            <div className="w-full lg:w-[450px]">
               <CheckoutSidebar totalAmount={totalAmount} loading={loading || submitting} />
             </div>
           </div>
         </form>
       </FormProvider>
-    </Container>
+    </div>
   );
 }

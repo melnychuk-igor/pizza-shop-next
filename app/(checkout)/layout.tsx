@@ -14,15 +14,15 @@ export default function CheckoutLayout({
 }) {
   return (
     <div className="min-h-screen bg-[#F4F1EE]">
+      <Suspense>
+        <Header
+          hasSearch={false}
+          hasCart={false}
+          className="border-b-gray-200"
+        />
+      </Suspense>
       <Container>
-        <Suspense>
-          <Header
-            hasSearch={false}
-            hasCart={false}
-            className="border-b-gray-200"
-          />
-        </Suspense>
-        <main className='overflow-hidden'>{children}</main>
+        <main className="overflow-hidden">{children}</main>
       </Container>
     </div>
   );

@@ -46,15 +46,15 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
           )}
 
           {!totalAmount && (
-            <div className="flex flex-col items-center justify-center w-72 mx-auto">
-              <Image src="/assets/images/empty-box.png" alt="Empty cart" width={120} height={120} />
+            <div className="flex flex-col items-center justify-center w-full max-w-72 mx-auto">
+              <Image className='w-20 lg:w-30' src="/assets/images/empty-box.png" alt="Empty cart" width={120} height={120} />
               <Title size="sm" text="Cart is empty" className="text-center font-bold my-2" />
               <p className="text-center text-neutral-500 mb-5">
                 Add at least one pizza to place an order
               </p>
 
               <SheetClose>
-                <Button className="w-56 h-12 text-base" size="lg">
+                <Button className="w-full max-w-56 h-12 text-base" size="lg">
                   <ArrowLeft className="w-5 mr-2" />
                   Go back
                 </Button>

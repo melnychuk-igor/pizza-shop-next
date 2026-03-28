@@ -61,16 +61,16 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   };
 
   return (
-    <div className={cn(className, 'flex flex-1')}>
+    <div className={cn(className, 'flex flex-1 flex-col lg:flex-row')}>
       <PizzaImage imageUrl={imageUrl} size={size} />
 
-      <div className="w-[490px] bg-[#f7f6f5] p-7">
+      <div className="w-full lg:w-1/2 bg-[#f7f6f5] rounded-sm lg:rounded-none p-2 lg:p-4 xl:p-5 flex flex-col justify-between gap-3">
         <div className='flex flex-col justify-between'>
           <Title text={name} size="md" className="font-extrabold mb-1" />
 
           <p className="text-gray-400">{textDetaills}</p>
 
-          <div className="flex flex-col gap-4 mt-5">
+          <div className="flex flex-col gap-3 mt-3">
             <GroupVariants
               items={availableSizes}
               value={String(size)}
@@ -84,7 +84,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
             />
           </div>
 
-          <div className="bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5">
+          <div className="lg:bg-gray-50 py-2 lg:p-3 lg:rounded-md overflow-auto scrollbar mt-3">
             <div className="grid grid-cols-3 gap-3">
               {ingredients.map((ingredient) => (
                 <IngredientItem
@@ -103,7 +103,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         <Button
           loading={loading}
           onClick={handleClickAdd}
-          className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
+          className="lg:h-[55px] px-10 text-base rounded-[18px] w-full"
         >
           Add to cart for {totalPrice} $
         </Button>

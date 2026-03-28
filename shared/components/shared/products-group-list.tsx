@@ -33,7 +33,7 @@ export const ProductsGroupList: React.FC<Props> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const sort = (searchParams.get('sort')) ? searchParams.get('sort') : 'name_asc';
+  const sort = searchParams.get('sort') ? searchParams.get('sort') : 'name_asc';
 
   const sortedItems = React.useMemo(() => {
     if (!sort) return items;
@@ -71,7 +71,12 @@ export const ProductsGroupList: React.FC<Props> = ({
     <div className={className} id={title} ref={intersectionRef}>
       <Title text={title} size="lg" className="font-extrabold mb-5" />
 
-      <div className={cn('grid grid-cols-3 gap-[50px]', listClassName)}>
+      <div
+        className={cn(
+          'grid grid-cols-1 min-[700px]:grid-cols-2 min-[1100px]:grid-cols-3 justify-items-center gap-5 xl2:gap-6',
+          listClassName
+        )}
+      >
         {sortedItems.map((product, i) => (
           <ProductCard
             key={product.id}

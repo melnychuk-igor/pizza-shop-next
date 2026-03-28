@@ -23,10 +23,10 @@ export const ProductCard: React.FC<Props> = ({
   className,
 }) => {
   return (
-    <div className={className}>
+    <div className={`${className} w-full max-w-[390px] min-[700px]:max-w-full`}>
       <Link
         href={`/product/${id}`}
-        className="flex flex-col justify-between h-full"
+        className="flex flex-col justify-between gap-3 h-full"
       >
         <div className="flex justify-center items-center p-1 bg-secondary rounded-lg h-[260px]">
           <img
@@ -40,7 +40,7 @@ export const ProductCard: React.FC<Props> = ({
           <div className="flex flex-col justify-between ">
             <Title text={name} size="sm" className="mb-1 font-bold" />
 
-            <p className="text-sm text-gray-400">
+            <p className="text-gray-400">
               {ingredients.map((ingredient) => ingredient.name).join(', ')}
             </p>
           </div>

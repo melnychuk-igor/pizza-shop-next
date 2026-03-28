@@ -9,30 +9,38 @@ import {
 import { Suspense } from 'react';
 import { GetSearchParams, findPizzas } from '@/shared/lib/find-pizzas';
 
-export default async function Home({ searchParams }: { searchParams: GetSearchParams }) {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: GetSearchParams;
+}) {
   const categories = await findPizzas(searchParams);
 
   return (
     <>
-      <Container className="mt-10">
-        <Title text="All pizzas" size="lg" className="font-extrabold" />
+      <Container className="mt-10 hidden lg:block">
+        <Title text="All pizzas" size="lg" className="font-extrabold leading-[1.2]" />
       </Container>
 
-      <TopBar categories={categories.filter((category) => category.products.length > 0)} />
+      <TopBar
+        categories={categories.filter(
+          (category) => category.products.length > 0
+        )}
+      />
 
       <Stories />
 
       <Container className="mt-10 pb-14">
-        <div className="flex gap-[80px]">
+        <div className="flex justify-between gap-12">
           {/* Filters */}
-          <div className="w-[250px]">
+          <div className="w-[250px] fixed lg:static top-0 left-0 bg-white pl-4 pt-4 z-5 hidden lg:block">
             <Suspense>
-              <Filters />
+              <Filters className="" />
             </Suspense>
           </div>
 
           {/* Products list */}
-          <div className="flex-1">
+          <div className="flex-1 mx-auto max-w-[720px] lg:max-w-full">
             <div className="flex flex-col gap-16">
               {categories.map(
                 (category) =>
@@ -43,7 +51,7 @@ export default async function Home({ searchParams }: { searchParams: GetSearchPa
                       categoryId={category.id}
                       items={category.products}
                     />
-                  ),
+                  )
               )}
             </div>
           </div>

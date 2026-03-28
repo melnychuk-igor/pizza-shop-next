@@ -47,7 +47,9 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
 
         {...Array(limit)
           .fill(0)
-          .map((_, index) => <Skeleton key={index} className="h-6 mb-4 rounded-[8px]" />)}
+          .map((_, index) => (
+            <Skeleton key={index} className="h-6 mb-4 rounded-[8px]" />
+          ))}
 
         <Skeleton className="w-28 h-6 mb-4 rounded-[8px]" />
       </div>
@@ -55,7 +57,9 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   }
 
   const list = showAll
-    ? items.filter((item) => item.text.toLowerCase().includes(searchValue.toLocaleLowerCase()))
+    ? items.filter((item) =>
+        item.text.toLowerCase().includes(searchValue.toLocaleLowerCase())
+      )
     : (defaultItems || items).slice(0, limit);
 
   return (
@@ -88,7 +92,10 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
 
       {items.length > limit && (
         <div className={showAll ? 'border-t border-t-neutral-100 mt-4' : ''}>
-            <button onClick={() => setShowAll(!showAll)} className="text-primary mt-3">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="text-primary mt-3 transition-colors hover:text-black"
+          >
             {showAll ? 'Hide' : '+ Show all'}
           </button>
         </div>

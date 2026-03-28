@@ -25,7 +25,7 @@ html {
     --primary: 22 100% 50%;
     --primary-foreground: 60 9.1% 97.8%;
 
-    --secondary: 32 100% 98%;
+    --secondary: 32 100% 96%;
     --secondary-foreground: 24 9.8% 10%;
 
     --muted: 60 4.8% 95.9%;
@@ -69,6 +69,100 @@ html {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .transition-colors,
+  .transition-all,
+  .transition-opacity,
+  .transition-transform {
+    transition-duration: 300ms;
+  }
+
+  @media (max-width: 1024px) {
+    .burger {
+      /* display: block; */
+      position: relative;
+      width: 40px;
+      height: 35px;
+      cursor: pointer;
+    }
+  
+    .burger span,
+    .burger:after,
+    .burger:before {
+      height: 3px;
+      width: 100%;
+      position: absolute;
+      background: #515758;
+      margin: 0 auto;
+      transition: 0.5s;
+      pointer-events: none;
+    }
+  
+    .burger span {
+      top: 16px;
+    }
+  
+    .burger:after,
+    .burger:before {
+      content: "";
+    }
+  
+    .burger:after {
+      bottom: 5px;
+    }
+  
+    .burger:before {
+      top: 5px;
+    }
+  
+    .burger--active span {
+      opacity: 0;
+      transition: 0.5s;
+    }
+  
+    .burger--active::before {
+      transform: rotate(45deg);
+      top: 16px;
+    }
+  
+    .burger--active::after {
+      transform: rotate(-45deg);
+      bottom: 16px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .burger {
+      width: 30px;
+      height: 25px;
+    }
+  
+    .burger span,
+    .burger:after,
+    .burger:before {
+      height: 2px;
+    }
+  
+    .burger span {
+      top: 11px;
+    }
+  
+    .burger:after {
+      bottom: 0px;
+    }
+  
+    .burger:before {
+      top: 0px;
+    }
+  
+    .burger--active:before {
+      top: 12px;
+    }
+  
+    .burger--active:after {
+      bottom: 11px;
+    }
   }
 }
 
