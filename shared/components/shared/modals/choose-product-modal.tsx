@@ -23,7 +23,6 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 
   return (
     <Dialog
-      className=""
       open={Boolean(product)}
       onOpenChange={() => router.back()}
     >
